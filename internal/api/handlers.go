@@ -1,23 +1,40 @@
-// api/handlers.go
 package api
 
 import (
     "github.com/gin-gonic/gin"
     "douq.merouaneamqor.com/internal/db"
     "douq.merouaneamqor.com/internal/model"
+    "strconv"
+    "net/http"
 )
 
 func getUsersHandler(c *gin.Context) {
     var users []model.User
 
-    // Use GORM's Find method to retrieve all users
-    result := db.DB.Find(&users)
+    // Default values for pagination
+    defaultLimit := 10
+    defaultPage := 1
+
+    // Read query parameters
+    page, err := strconv.Atoi(c.DefaultQuery("page", strconv.Itoa(defaultPage)))
+    if err != nil || page < 1 {
+        page = defaultPage
+    }
+
+    limit, err := strconv.Atoi(c.DefaultQuery("limit", strconv.Itoa(defaultLimit)))
+    if err != nil || limit < 1 {
+        limit = defaultLimit
+    }
+
+    offset := (page - 1) * limit
+
+    // Use GORM's pagination feature to retrieve a subset of users
+    result := db.DB.Limit(limit).Offset(offset).Find(&users)
     if result.Error != nil {
-        // Handle the error appropriately
-        c.JSON(500, gin.H{"error": result.Error.Error()})
+        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
         return
     }
 
-    // Send the retrieved users as JSON
-    c.JSON(200, gin.H{"users": users})
+    // Send the paginated users as JSON
+    c.JSON(http.StatusOK, gin.H{"users": users, "page": page, "limit": limit})
 }

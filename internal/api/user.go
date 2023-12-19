@@ -18,7 +18,7 @@ func createFakeUsers(c *gin.Context) {
 	var users []model.User
 
 	// Generate 1000 fake users
-	for i := 0; i < 50000; i++ {
+	for i := 0; i < 500000; i++ {
 		users = append(users, util.GenerateFakeUser())
 	}
 
@@ -29,5 +29,5 @@ func createFakeUsers(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "1000 fake users created successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "500000 fake users created successfully"})
 }

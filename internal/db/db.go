@@ -11,7 +11,8 @@ import (
 
 var DB *gorm.DB
 
-func init() {
+// InitDB initializes and returns a database connection
+func InitDB() *gorm.DB {
     // Load .env file
     err := godotenv.Load()
     if err != nil {
@@ -28,13 +29,13 @@ func init() {
     )
 
     // Establish a connection to the database
-    DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
     if err != nil {
         log.Fatalf("Failed to connect to database: %v", err)
     }
 
-    // Ping the database to verify the connection (GORM does this implicitly)
-    sqlDB, err := DB.DB()
+    // Ping the database to verify the connection
+    sqlDB, err := db.DB()
     if err != nil {
         log.Fatalf("Failed to get database connection: %v", err)
     }
@@ -43,29 +44,11 @@ func init() {
     if err != nil {
         log.Fatalf("Failed to ping database: %v", err)
     }
+
+    return db
 }
-func InitDB() error {
-    dsn := "host=" + os.Getenv("DB_HOST") + 
-           " user=" + os.Getenv("DB_USER") +
-           " password=" + os.Getenv("DB_PASS") +
-           " dbname=" + os.Getenv("DB_NAME") +
-           " port=" + os.Getenv("DB_PORT") +
-           " sslmode=disable"
 
-    var err error
-    DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-    if err != nil {
-        return err
-    }
-
-    sqlDB, err := DB.DB()
-    if err != nil {
-        return err
-    }
-
-    if err := sqlDB.Ping(); err != nil {
-        return err
-    }
-
-    return nil
+func init() {
+    // Initialize the global DB variable
+    DB = InitDB()
 }

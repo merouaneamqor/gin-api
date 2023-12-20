@@ -21,7 +21,7 @@ rm go1.21.5.linux-amd64.tar.gz
 # Set up environment variables
 echo "export GOROOT=$GO_DIR/go" >> ~/.profile
 echo "export PATH=\$PATH:\$GOROOT/bin" >> ~/.profile
-
+echo "export PATH=$GOPATH\$bin:$GOROOT\$bin:$PATH" >> ~/.profile
 # Apply the environment variables
 source ~/.profile
 

@@ -13,7 +13,8 @@ import (
 
 var DB *gorm.DB
 
-func init() {
+// InitDB initializes and returns a database connection
+func InitDB() *gorm.DB {
     // Load .env file
     println("connect to db =================1")
     err := godotenv.Load()
@@ -31,13 +32,13 @@ func init() {
     )
 
     // Establish a connection to the database
-    DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
     if err != nil {
         log.Fatalf("Failed to connect to database: %v", err)
     }
 
-    // Ping the database to verify the connection (GORM does this implicitly)
-    sqlDB, err := DB.DB()
+    // Ping the database to verify the connection
+    sqlDB, err := db.DB()
     if err != nil {
         log.Fatalf("Failed to get database connection: %v", err)
     }
@@ -48,4 +49,11 @@ func init() {
     if err != nil {
         log.Fatalf("Failed to ping database: %v", err)
     }
+
+
+    return db
+}
+
+func init() {
+    DB = InitDB()
 }

@@ -18,8 +18,8 @@ func RegisterUserRoutes(router *gin.RouterGroup) {
 func createFakeUsers(c *gin.Context) {
 	var users []model.User
 	number_users:=60000
-	// Generate 1000 fake users
 	for i := 0; i < number_users; i++ {
+
 		users = append(users, util.GenerateFakeUser())
 	}
 
@@ -29,6 +29,6 @@ func createFakeUsers(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("%d fake users created successfully",number_users)})
+
 }

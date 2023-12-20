@@ -16,7 +16,6 @@ var DB *gorm.DB
 // InitDB initializes and returns a database connection
 func InitDB() *gorm.DB {
     // Load .env file
-    println("connect to db =================1")
     err := godotenv.Load()
     if err != nil {
         log.Fatalf("Error loading .env file: %v", err)

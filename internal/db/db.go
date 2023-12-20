@@ -1,12 +1,14 @@
 package db
 
 import (
-    "fmt"
-    "log"
-    "os"
-    "gorm.io/driver/postgres"
-    "gorm.io/gorm"
-    "github.com/joho/godotenv"
+	"fmt"
+	"log"
+	"os"
+	"time"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -41,6 +43,7 @@ func init() {
     }
     sqlDB.SetMaxIdleConns(2)
     sqlDB.SetMaxOpenConns(5)
+    sqlDB.SetConnMaxLifetime(time.Hour)
     err = sqlDB.Ping()
     if err != nil {
         log.Fatalf("Failed to ping database: %v", err)

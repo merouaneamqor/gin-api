@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var dbInstance *gorm.DB
+var DB *gorm.DB
 
 // initialize_database_config initializes the database configuration by loading environment variables
 func initialize_database_config() {
@@ -88,5 +88,5 @@ func get_int_env(key string) int {
 
 // init is automatically called when the package is imported
 func init() {
-	dbInstance = initialize_database()
+	DB = initialize_database()
 }

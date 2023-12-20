@@ -12,8 +12,6 @@ import (
 func main() {
     r := gin.Default()
 
-    // No need to call InitDB() here as it's already called in the db package's init function
-
     // AutoMigrate the models
     if err := db.DB.AutoMigrate(&model.User{}); err != nil {
         log.Fatalf("Failed to auto migrate: %v", err)

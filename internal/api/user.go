@@ -2,6 +2,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"douq.merouaneamqor.com/internal/db"
@@ -16,9 +17,9 @@ func RegisterUserRoutes(router *gin.RouterGroup) {
 
 func createFakeUsers(c *gin.Context) {
 	var users []model.User
+	number_users:=60000
+	for i := 0; i < number_users; i++ {
 
-	// Generate 1000 fake users
-	for i := 0; i < 500000; i++ {
 		users = append(users, util.GenerateFakeUser())
 	}
 
@@ -28,6 +29,6 @@ func createFakeUsers(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("%d fake users created successfully",number_users)})
 
-	c.JSON(http.StatusOK, gin.H{"message": "500000 fake users created successfully"})
 }

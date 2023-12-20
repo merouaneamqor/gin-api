@@ -13,9 +13,7 @@ func main() {
 	r := gin.Default()
 
 	// Initialize the database connection
-	if err := db.InitDB(); err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
+
 
 	// AutoMigrate the models
 	if err := db.DB.AutoMigrate(&model.User{}); err != nil {

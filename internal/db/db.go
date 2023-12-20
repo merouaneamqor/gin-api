@@ -13,6 +13,7 @@ var DB *gorm.DB
 
 func init() {
     // Load .env file
+    println("connect to db =================1")
     err := godotenv.Load()
     if err != nil {
         log.Fatalf("Error loading .env file: %v", err)
@@ -38,34 +39,10 @@ func init() {
     if err != nil {
         log.Fatalf("Failed to get database connection: %v", err)
     }
-
+    sqlDB.SetMaxIdleConns(2)
+    sqlDB.SetMaxOpenConns(5)
     err = sqlDB.Ping()
     if err != nil {
         log.Fatalf("Failed to ping database: %v", err)
     }
-}
-func InitDB() error {
-    dsn := "host=" + os.Getenv("DB_HOST") + 
-           " user=" + os.Getenv("DB_USER") +
-           " password=" + os.Getenv("DB_PASS") +
-           " dbname=" + os.Getenv("DB_NAME") +
-           " port=" + os.Getenv("DB_PORT") +
-           " sslmode=disable"
-
-    var err error
-    DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-    if err != nil {
-        return err
-    }
-
-    sqlDB, err := DB.DB()
-    if err != nil {
-        return err
-    }
-
-    if err := sqlDB.Ping(); err != nil {
-        return err
-    }
-
-    return nil
 }
